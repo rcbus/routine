@@ -1,0 +1,131 @@
+:root{
+  --color-dark-blue: rgb(0,40,70);
+  --color-dark-blue-a: rgba(0,40,70,0.9);
+  --color-light-blue: rgb(200,220,250);
+  --color-light-blue-a: rgba(200,220,250,0.9);
+  --color-light-green: rgb(200,250,220);
+  --color-light-green-a: rgba(200,250,220,0.9);
+  --color-orange: rgb(250,150,0);
+  --color-purple: #6f42c1;
+  --color-ultra-light-blue: rgb(245,250,255);
+  --color-ultra-light-blue-a: rgba(245,250,255,0.9);
+  --color-yellow: #ffc107;
+}
+
+.dtaTop{
+  background-color:var(--color-dark-blue);
+}
+.dtaTopSubA{
+  background-color:#17a2b8;
+  color:var(--color-dark-blue);
+}
+.dtaRowA{
+  background-color:var(--color-ultra-light-blue);
+  cursor:pointer;
+}
+.dtaRowA:hover{
+  background-color:var(--color-orange);
+}
+.dtaRowAsubA{
+  background-color:var(--color-ultra-green-blue);
+  cursor:pointer;
+}
+.dtaRowAsubA:hover{
+  background-color:var(--color-yellow);
+}
+.dtaRowB{
+  background-color:var(--color-light-blue);
+  cursor:pointer;
+}
+.dtaRowB:hover{
+  background-color:var(--color-orange);
+}
+.dtaRowBsubA{
+  background-color:var(--color-light-green);
+  cursor:pointer;
+}
+.dtaRowBsubA:hover{
+  background-color:var(--color-yellow);
+}
+
+.moldura{
+  position:relative;
+  align-items: center;
+  text-align: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  top:0px;
+  padding:5px;
+  border:1px;
+  border-color:rgb(200,200,200);
+  border-style:solid;
+  border-radius:5px;
+  background-color:rgb(0,40,70);
+}
+
+@keyframes pisca{
+  0% {opacity: 1;}
+  50% {opacity: 0.9;}
+  100% {opacity: 1;}
+}
+
+.pisca{
+  transition:1s;
+  animation:pisca 1s alternate infinite linear;
+}
+
+.stdBlue{
+  background-color:#007bff;
+  color:white;
+}
+
+.stdGreen{
+  background-color:#28a745;
+  color:white;
+}
+
+.stdOrange{
+  background-color:#fd7e14;
+  color:black;
+}
+
+.stdPurple{
+  background-color:rgb(86,61,124);
+  color:white;
+}
+
+.stdRed{
+  background-color:#dc3545;
+  color:white;
+}
+
+.stdTeal{
+  background-color:#20c997;
+  color:black;
+}
+
+.stdYellow{
+  background-color:rgb(250,230,50);
+  color:black;
+}
+
+.stdSilver{
+  background-color:#6c757d;
+  color:black;
+}
+
+.stdSilverLight{
+  background-color:rgb(170,170,170);
+  color:black;
+}
+
+table{
+  min-width:50%;
+}
+
+.version{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
