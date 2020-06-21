@@ -2,9 +2,9 @@ import Head from 'next/head'
 import Layout from '../components/layout'
 import Dta from '../components/data-table-adapter'
 
-const siteTitle = "Routine"
+const siteTitle = "Rotina :: Pendente"
 
-export default function Home({data}) {
+export default function RoutinePending({data}) {
   return (
     <Layout description="My Son's Routine" appName="Routine">
       <Head>

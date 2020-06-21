@@ -22,7 +22,7 @@ $ git branch -D branch (para deletar uma branch se necessário)
 
 $ git pull origin master
 
-OBS.: Alterar a versão no arquivo version-component.js a cada pull origin master
+OBS.: Alterar a versão no arquivo version-app.js a cada pull origin master
 
 $ git add . 		||		$ git add filename.ext		||		$ git reset HEAD filename.ext
 
