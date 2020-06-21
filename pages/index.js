@@ -22,15 +22,5 @@ export default function Home({data}) {
 }
 
 export async function getStaticProps() {
-  //http://localhost:3000/api/estoque
-  //http://localhost/profiable/PROFIABLE/api/estoque.php
-  const res = await fetch('http://localhost:3000/api/routine-pending')
-  const data = await res.json();
-  if(data){
-    return {
-      props: {
-        data
-      }
-    }
-  }
+  /* carregar dados via api */
 }
