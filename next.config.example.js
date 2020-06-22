@@ -11,12 +11,13 @@ module.exports = {
         host: 'localhost',
         port: 3000,
         dbHost: 'localhost',
+        dbPort: 3006,
         dbName: 'teste',
         dbUser: 'root',
         dbPass: '123',
         protocolApi: 'http',
         hostApi: 'localhost',
-        portApi: '3000',
+        portApi: 3000,
         tokenApi: '#$i&%p@*a$#'
     }
 }
