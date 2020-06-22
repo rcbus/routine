@@ -8,7 +8,7 @@ const siteTitle = "Rotina"
 const now = new Date();
 
 const formRoutine = {
-  id:'',
+  _id:'',
   branch:'',
   user:'',
   date:'',
@@ -104,27 +104,19 @@ export default class extends React.Component {
     this.setState({
       formRoutine:this.setSubState(
         this.state.formRoutine,{
-          branch:1,
-          user:1,
-          date:now.getTime(),
-          dateModification:now.getTime(),
-          historic:'# CRIADO POR (1) ADMIN EM ' + zeroLeft(now.getDate(),2) + '/' + zeroLeft(now.getMonth()+1,2) + '/' + now.getFullYear() + ' ' + zeroLeft(now.getHours(),2) + ':' + zeroLeft(now.getMinutes(),2) + ':' + zeroLeft(now.getSeconds(),2),
           status:1
         }
       )
     })    
-    api(process.env.protocolApi + '://' + process.env.hostApi + ':' + process.env.portApi + '/api/routine-create',process.env.tokenApi,this.state.formRoutine,this.returnData)
-  }
-
-  returnData = (res) => {
-    if(res.res=="success"){
-      console.log(res.data)
-      this.setState({
-        formRoutine:this.setSubState(
-          this.state.formRoutine,res.data
-        )
-      })
-    }
+    api(process.env.protocolApi + '://' + process.env.hostApi + ':' + process.env.portApi + '/api/routine-create',process.env.tokenApi,this.state.formRoutine,(res) => {
+      if(res.res=="success"){
+        this.setState({
+          formRoutine:this.setSubState(
+            this.state.formRoutine,res.data
+          )
+        })
+      }  
+    })
   }
 
   getStatus(status){
@@ -163,7 +155,7 @@ export default class extends React.Component {
             <div className="form-row">
               <div className={setCols(6,5,4,2,2)}>
                 <label>ID</label>
-                <input type="text" className="form-control text-center" name="id" value={this.state.formRoutine.id} readOnly />
+                <input type="text" className="form-control text-center" name="id" value={this.state.formRoutine._id} readOnly />
               </div>
               <div className={setCols(6,7,6,3,2)}>
                 <label>Status</label>
