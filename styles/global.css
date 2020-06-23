@@ -12,42 +12,6 @@
   --color-yellow: #ffc107;
 }
 
-.dtaTop{
-  background-color:var(--color-dark-blue);
-}
-.dtaTopSubA{
-  background-color:#17a2b8;
-  color:var(--color-dark-blue);
-}
-.dtaRowA{
-  background-color:var(--color-ultra-light-blue);
-  cursor:pointer;
-}
-.dtaRowA:hover{
-  background-color:var(--color-orange);
-}
-.dtaRowAsubA{
-  background-color:var(--color-ultra-green-blue);
-  cursor:pointer;
-}
-.dtaRowAsubA:hover{
-  background-color:var(--color-yellow);
-}
-.dtaRowB{
-  background-color:var(--color-light-blue);
-  cursor:pointer;
-}
-.dtaRowB:hover{
-  background-color:var(--color-orange);
-}
-.dtaRowBsubA{
-  background-color:var(--color-light-green);
-  cursor:pointer;
-}
-.dtaRowBsubA:hover{
-  background-color:var(--color-yellow);
-}
-
 .moldura{
   position:relative;
   align-items: center;
@@ -131,10 +95,6 @@
 .stdSilverLight{
   background-color:rgb(170,170,170);
   color:black;
-}
-
-table{
-  min-width:50%;
 }
 
 .version{
