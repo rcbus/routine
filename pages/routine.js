@@ -3,6 +3,8 @@ import Head from 'next/head'
 import Layout from '../components/layout'
 import { setCols,zeroLeft } from '../libs/functions'
 import { api } from '../libs/api'
+import { openLoading, closeLoading } from '../components/loading'
+import { openMsg } from '../components/msg';
 
 const siteTitle = "Rotina"
 const now = new Date();
@@ -101,6 +103,7 @@ export default class extends React.Component {
   }
 
   onClick = (e) => {
+    openLoading({count:[1,5,10]})
     this.setState({
       formRoutine:this.setSubState(
         this.state.formRoutine,{
@@ -109,13 +112,24 @@ export default class extends React.Component {
       )
     })    
     api(process.env.protocolApi + '://' + process.env.hostApi + ':' + process.env.portApi + '/api/routine-create',process.env.tokenApi,this.state.formRoutine,(res) => {
-      if(res.res=="success"){
+      if(res.res=="error"){
+        this.setState({
+          formRoutine:this.setSubState(
+            this.state.formRoutine,{
+              status:''
+            }
+          )
+        })
+        openMsg({text:res.error,type:-1})
+      }else{
         this.setState({
           formRoutine:this.setSubState(
             this.state.formRoutine,res.data
           )
         })
+        openMsg({text:'Rotina cadastrada com sucesso!',type:1})
       }  
+      closeLoading()
     })
   }
 
@@ -231,6 +245,6 @@ export default class extends React.Component {
           </form>
         </div>
       </Layout>
-    );
+    )
   }
 }
