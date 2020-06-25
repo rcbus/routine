@@ -2,13 +2,14 @@ import { ins,upd } from '../../libs/mongo'
 import { security } from '../../libs/api'
 
 export default async (req, res) => {
-    var consolidatedResponse = {}
-
     const securityResult = security(req);
     if(securityResult.res=='error'){
-        consolidatedResponse = securityResult;
+        res.statusCode = 200
+        res.json(securityResult)
     }else if(securityResult.res=='success'){
-        const data = securityResult.data
+        var data = securityResult.data
+        data.status = 1
+        data.description = data.description.toUpperCase()
         if(data.description.length==0){
             res.statusCode = 200
             res.json({ res: 'error',error: 'Descrição é obrigatório!' })
