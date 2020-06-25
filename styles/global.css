@@ -12,6 +12,10 @@
   --color-yellow: #ffc107;
 }
 
+.divScrollX {
+  overflow-x: auto;
+}
+
 .moldura{
   position:relative;
   align-items: center;
