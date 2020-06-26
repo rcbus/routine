@@ -12,6 +12,14 @@
   --color-yellow: #ffc107;
 }
 
+.btn-group.special {
+  display: flex;
+}
+
+.special .middle.btn {
+  flex: 1
+}
+
 .divScrollX {
   overflow-x: auto;
 }

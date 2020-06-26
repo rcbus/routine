@@ -12,11 +12,15 @@ export default class extends React.Component {
     super(props);
     this.state = {
       formRoutine:this.getStdFormState(),
+      next:false,
+      prev:false,
       action:false,
       title:'Lista :: Rotina',
       listRoutine:[],
-      listRoutineConfig:[]
+      listRoutineConfig:[],
+      seeAll:false
     };
+    this.description = React.createRef();
   }
 
   componentDidMount(){
@@ -24,8 +28,14 @@ export default class extends React.Component {
   }
 
   getListData = (e) => {
+    var condition = {}
+    if(typeof e === 'undefined'){
+      if(this.state.seeAll===false){ condition = {status:1} }
+    }else{
+      condition = e
+    }
     openLoading()
-    api(process.env.protocolApi + '://' + process.env.hostApi + ':' + process.env.portApi + '/api/routine-list',process.env.tokenApi,{},(res) => {
+    api(process.env.protocolApi + '://' + process.env.hostApi + ':' + process.env.portApi + '/api/routine-list',process.env.tokenApi,condition,(res) => {
       if(res.res=="error"){
         openMsg({text:res.error,type:-1})
       }else{
@@ -128,24 +138,35 @@ export default class extends React.Component {
   }
 
   onClick = (e) => {
-    if(e.target.name=='cadastrar'){
+    if(e.target.name=='register'){
       this.setState({
         action:'modify',
         title:'Cadastrar :: Rotina',
         formRoutine:this.getStdFormState()
       })
+      if(this.description.current != null){ this.description.current.focus() }
+    }else if(e.target.name=='seeAll'){
+      this.setState({
+        seeAll:!this.state.seeAll
+      })
+      if(this.state.seeAll===false){ this.getListData({}) }else{ this.getListData({status:1}) }
     }else if(e.target.name=='salvar'){
       openLoading({count:[1,5,60]})   
-      api(process.env.protocolApi + '://' + process.env.hostApi + ':' + process.env.portApi + '/api/routine-create',process.env.tokenApi,this.state.formRoutine,(res) => {
+      api(process.env.protocolApi + '://' + process.env.hostApi + ':' + process.env.portApi + '/api/routine',process.env.tokenApi,this.state.formRoutine,(res) => {
         if(res.res=="error"){
           openMsg({text:res.error,type:-1})
         }else{
+          if(this.state.formRoutine._id.length==0){
+            openMsg({text:'Rotina cadastrada com sucesso!',type:1})
+          }else{
+            openMsg({text:'Rotina alterada com sucesso!',type:1})
+          }
+
           this.setState({
             formRoutine:this.setSubState(
               this.state.formRoutine,res.data[0]
             )
           })
-          openMsg({text:'Rotina cadastrada com sucesso!',type:1})
         }  
         closeLoading()
       })
@@ -155,21 +176,69 @@ export default class extends React.Component {
         action:false,
         title:'Lista :: Rotina'
       })
+    }else if(e.target.name=='da'){
+      if(this.state.formRoutine.status==1){
+        openMsg({text:'Deseja excluir essa rotina?',type:0,callbackYes:this.da,textYes:'Sim',textNo:'Não'})  
+      }else{
+        openMsg({text:'Deseja ativar essa rotina?',type:0,callbackYes:this.da,textYes:'Sim',textNo:'Não'})
+      }
+    }else if(e.target.name=='next'){
+      if(this.state.next!==false){ this.onClickCell(this.state.next) }
+    }else if(e.target.name=='prev'){
+      if(this.state.prev!==false){ this.onClickCell(this.state.prev) }
     }
   }
 
+  da = (e) => {
+    openLoading({count:[1,5,60]})   
+    var formRoutine = this.state.formRoutine
+    if(formRoutine.status==1){ formRoutine.status = 0 }else{ formRoutine.status = 1 }
+    api(process.env.protocolApi + '://' + process.env.hostApi + ':' + process.env.portApi + '/api/routine',process.env.tokenApi,formRoutine,(res) => {
+      if(res.res=="error"){
+        openMsg({text:res.error,type:-1})
+      }else{
+        if(formRoutine.status==1){
+          openMsg({text:'Rotina ativada com sucesso!',type:1})
+        }else{
+          openMsg({text:'Rotina excluída com sucesso!',type:1})
+        }
+
+        this.setState({
+          formRoutine:this.setSubState(
+            this.state.formRoutine,res.data[0]
+          )
+        })
+      }  
+      closeLoading()
+    })
+  }
+
   onClickCell = (e) => {
-    var id = e.target.getAttribute('name').substr(0,e.target.getAttribute('name').indexOf('#'))
+    if(typeof e.target !== 'undefined'){
+      var id = e.target.getAttribute('name').substr(0,e.target.getAttribute('name').indexOf('#'))
+    }else{
+      var id = e
+    }
     var routine = false
+    var next = false
+    var prev = false
     Object.keys(this.state.listRoutine).map(k => {
-      if(this.state.listRoutine[k]._id==id){
-        routine = this.state.listRoutine[k]
+      if(routine===false){
+        if(this.state.listRoutine[k]._id==id){
+          routine = this.state.listRoutine[k]
+        }else{
+          prev = this.state.listRoutine[k]._id
+        }
+      }else if(next===false){
+        next = this.state.listRoutine[k]._id
       }
     })
     this.setState({
       action:'modify',
       title:'Modificar :: Rotina',
-      formRoutine:(routine==false ? this.getStdFormState() : routine)
+      formRoutine:(routine==false ? this.getStdFormState() : routine),
+      next,
+      prev
     })
   }
 
@@ -208,8 +277,11 @@ export default class extends React.Component {
           <div className="item space-mb">
             <form autoComplete="off">
               <div className="form-row">
-                <div className={setCols(12,6,3,2,2)}>
-                  <button type="button" name="cadastrar" className="btn btn-primary btn-lg btn-block" onClick={this.onClick}>+ Cadastrar</button>
+                <div className={setCols(12,6,3,2,2,1)}>
+                  <button type="button" name="register" className="btn btn-primary btn-lg btn-block" onClick={this.onClick}>+ Cadastrar</button>
+                </div>
+                <div className={setCols(12,6,3,2,2,1)}>
+                  <button type="button" name="seeAll" className={"btn " + (this.state.seeAll===false ? "btn-secondary" : "btn-warning") + " btn-lg btn-block"} onClick={this.onClick}>{this.state.seeAll===false ? "Ver Todas" : "Não Ver Todas"}</button>
                 </div>
               </div>
               <div className="form-row">
@@ -233,17 +305,21 @@ export default class extends React.Component {
           <div className="item space-mb">
             <form autoComplete="off">
               <div className="form-row">
-                <div className={setCols(6,5,4,2,2)}>
-                  <label>ID</label>
-                  <input type="text" className="form-control text-center" name="id" value={this.state.formRoutine._id} readOnly />
+                <div className={setCols(6,5,5,2,2)}>
+                  <label>ID</label><br/>
+                  <div className="btn-group special">
+                    <button type="button" name="prev" className="btn btn-secondary" onClick={this.onClick}>{"<"}</button>
+                    <button type="button" name="_id" className="middle btn btn-outline-dark" disabled>{this.state.formRoutine._id}</button>
+                    <button type="button" name="next" className="btn btn-secondary" onClick={this.onClick}>{">"}</button>
+                  </div>
                 </div>
-                <div className={setCols(6,7,6,3,2)}>
+                <div className={setCols(6,7,7,3,2)}>
                   <label>Status</label>
                   <div className={"std text-center " + this.getStatus(this.state.formRoutine.status).class}>{this.getStatus(this.state.formRoutine.status).description}</div>
                 </div>
-                <div className={setCols(12,8,7,5,6)}>
+                <div className={setCols(12,8,9,5,6)}>
                   <label>Descrição</label>
-                  <input type="text" className="form-control" name="description" value={this.state.formRoutine.description} onChange={this.onChangeFormRoutine} autoFocus />
+                  <input ref={this.description} type="text" className="form-control" name="description" value={this.state.formRoutine.description} onChange={this.onChangeFormRoutine} autoFocus />
                 </div>
                 <div className={setCols(12,4,3,2,2)}>
                   <label>Horario</label>
@@ -304,11 +380,19 @@ export default class extends React.Component {
                 </div>
               </div>
               <div className="form-row">
-                <div className={setCols(6,3,3,2,2)}>
+                <div className={setCols(6,4,3,2,2,2)}>
                   <button type="button" name="salvar" className="btn btn-success btn-lg btn-block" onClick={this.onClick}>Salvar</button>
                 </div>
-                <div className={setCols(6,3,3,2,2)}>
+                <div className={setCols(6,4,3,2,2,2)}>
                   <button type="button" name="cancelar" className="btn btn-warning btn-lg btn-block" onClick={this.onClick}>Cancelar</button>
+                </div>
+                {this.state.formRoutine.status!==false ? (
+                  <div className={setCols(6,4,3,2,2,2)}>
+                    <button type="button" name="da" className={"btn " + (this.state.formRoutine.status==1 ? "btn-danger" : "btn-info") + " btn-lg btn-block"} onClick={this.onClick}>{this.state.formRoutine.status==1 ? "Excluir" : "Ativar"}</button>
+                  </div>
+                ):null}
+                <div className={setCols(6,4,3,2,2,2)}>
+                  <button type="button" name="register" className="btn btn-primary btn-lg btn-block" onClick={this.onClick}>+ Cadastrar</button>
                 </div>
               </div>
             </form>
