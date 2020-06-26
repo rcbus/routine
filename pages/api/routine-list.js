@@ -26,7 +26,7 @@ export default async (req, res) => {
                     }
                 })
             }
-        })
+        },{_id:-1})
     }else{
         res.statusCode = 200
         res.json({ res: 'error',error: 'undefined' })
