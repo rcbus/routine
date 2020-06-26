@@ -142,7 +142,9 @@ export default class extends React.Component {
       this.setState({
         action:'modify',
         title:'Cadastrar :: Rotina',
-        formRoutine:this.getStdFormState()
+        formRoutine:this.getStdFormState(),
+        next:false,
+        prev:false
       })
       if(this.description.current != null){ this.description.current.focus() }
     }else if(e.target.name=='seeAll'){
@@ -280,7 +282,7 @@ export default class extends React.Component {
                 <div className={setCols(12,6,3,2,2,1)}>
                   <button type="button" name="register" className="btn btn-primary btn-lg btn-block" onClick={this.onClick}>+ Cadastrar</button>
                 </div>
-                <div className={setCols(12,6,3,2,2,1)}>
+                <div className={setCols(12,6,3,3,2,1)}>
                   <button type="button" name="seeAll" className={"btn " + (this.state.seeAll===false ? "btn-secondary" : "btn-warning") + " btn-lg btn-block"} onClick={this.onClick}>{this.state.seeAll===false ? "Ver Todas" : "Não Ver Todas"}</button>
                 </div>
               </div>
@@ -308,9 +310,9 @@ export default class extends React.Component {
                 <div className={setCols(6,5,5,2,2)}>
                   <label>ID</label><br/>
                   <div className="btn-group special">
-                    <button type="button" name="prev" className="btn btn-secondary" onClick={this.onClick}>{"<"}</button>
+                    <button type="button" name="prev" className="btn btn-secondary" disabled={this.state.prev===false ? true : false} onClick={this.onClick}>{"<"}</button>
                     <button type="button" name="_id" className="middle btn btn-outline-dark" disabled>{this.state.formRoutine._id}</button>
-                    <button type="button" name="next" className="btn btn-secondary" onClick={this.onClick}>{">"}</button>
+                    <button type="button" name="next" className="btn btn-secondary" disabled={this.state.next===false ? true : false} onClick={this.onClick}>{">"}</button>
                   </div>
                 </div>
                 <div className={setCols(6,7,7,3,2)}>
